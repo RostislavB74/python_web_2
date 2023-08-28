@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='Next Frontier Project',
-    version='0.1.11 beta',
+    version='0.1.11b',
     description='Personal Assistant Project',
     license='MIT',
     author='Next Frontier',

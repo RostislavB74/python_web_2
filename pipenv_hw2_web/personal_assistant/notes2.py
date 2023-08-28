@@ -1,7 +1,9 @@
+import difflib
 from collections import UserDict
 import pickle
 from rich.console import Console
 from rich.table import Table
+#from personal_assistant.new_ABC import RichCommands
 from helpers import instruction, parser_input, command_handler
 
 
@@ -123,7 +125,6 @@ class NoteBook(UserDict):
             print("\n***Ooops***\nInvalid input. Please enter a number.")
             nb.edit_note()
 
-
     def search_note(self, text):
         found_fields = []
         for key, value in self.items():
@@ -132,17 +133,18 @@ class NoteBook(UserDict):
 
         console = Console()
         table = Table(show_header=True, header_style="bold magenta", width=60, show_lines=True)
-        table.add_column("Key", width=20, no_wrap=False)
-        table.add_column("Note")
+        table.add_column("Note", width=20, no_wrap=False)
+        table.add_column("Tags")
 
         for obj in found_fields:
-            print (obj)
-            table.add_row(str(obj[0]), str(obj[1]))
+            str_tags = ", ".join(obj[1])
+            table.add_row(str(obj[0]), str_tags)
+
         if found_fields:
             return console.print(table)
         else:
             return console.print("\n***Ooops***\nNo matching found.")
-    
+
     def search_tag(self, text):
         found_tags = []
 
@@ -241,7 +243,7 @@ def help_menu():
     pass
 
 
-NOTE_COMMANDS = {
+note_commands = {
     "add": [add_note, 'to add note'],
     "delete": [delete_note, 'to delete note'],
     "edit": [change_note, 'to edit note'],
@@ -252,15 +254,46 @@ NOTE_COMMANDS = {
 }
 
 
+def pars(txt_comm: str, command_dict):
+    command = None
+    for key in command_dict.keys():
+        if txt_comm.startswith(key):
+            command = key
+    return command
+
+
+def command_handler(user_input, commands):
+    if user_input in commands:
+        return commands[user_input][0]()
+    possible_command = difflib.get_close_matches(user_input, commands, cutoff=0.5)
+    if possible_command:
+        return f'Wrong command. Maybe you mean: {", ".join(possible_command)}'
+    else:
+        return f'Wrong command.'
+
+
+# def instruction(command_dict):
+#     console = Console()
+#     table = Table(show_header=True, header_style="bold magenta", width=60, show_lines=False)
+#     table.add_column("Command", max_width=None, no_wrap=False)
+#     table.add_column("Description", width=20, no_wrap=False)
+
+#     for func_name, func in command_dict.items():
+#         table.add_row(str(func_name), str(func[1]))
+
+#     console.print(table)
+
+
 def notes_main():
     print("\n\n***Hello I`m a notebook.***\n")
-    instruction(NOTE_COMMANDS)
+    note_menu = RichCommands()
+    note_menu.notes_commands(note_commands)
     nb.load()
     while True:
         user_input_command = str(input("\nInput a command:\n>>>"))
-        command = parser_input(user_input_command.lower(), NOTE_COMMANDS)
+        command = pars(user_input_command.lower(), note_commands)
         if user_input_command == 'help':
-            instruction(NOTE_COMMANDS)
+            note_menu.notes_commands(note_commands)
         elif user_input_command in ("exit", "0"):
             nb.save()
             print('Notebook closed')
@@ -268,10 +301,10 @@ def notes_main():
         elif user_input_command == 'show all':
             show_notes()
         else:
-            if command in NOTE_COMMANDS:
-                result = command_handler(command, NOTE_COMMANDS)
+            if command in note_commands:
+                result = command_handler(command, note_commands)
             else:
-                result = command_handler(user_input_command, NOTE_COMMANDS)
+                result = command_handler(user_input_command, note_commands)
             nb.save()
             if result:
                 print(result)
