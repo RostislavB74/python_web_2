@@ -2,7 +2,7 @@ from collections import UserDict
 import pickle
 from rich.console import Console
 from rich.table import Table
-from helpers import instruction, parser_input, command_handler
+from personal_assistant.helpers import instruction, parser_input, command_handler
 
 
 class Tag:
@@ -252,7 +252,7 @@ NOTE_COMMANDS = {
 }
 
 
-def notes_main():
+def notes_starter():
     print("\n\n***Hello I`m a notebook.***\n")
     instruction(NOTE_COMMANDS)
     nb.load()
@@ -278,4 +278,4 @@ def notes_main():
 
 
 if __name__ == "__main__":
-    notes_main()
+    notes_starter()
