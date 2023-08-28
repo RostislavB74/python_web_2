@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 rich = "13.5.2"
+ipython = "8.12.2"
 
 [dev-packages]
 
