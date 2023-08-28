@@ -25,7 +25,6 @@ class ContactField(ABC):
 
 
 class ContactName(ContactField):
-
     def __init__(self, value):
         name = value.split(" ")
         for elem in name:
@@ -39,24 +38,25 @@ class ContactName(ContactField):
 
 
 class ContactPhone(ContactField):
-
-    def __init__(self, value=''):
+    def __init__(self, value=""):
         while True:
             self.value = []
             if value:
                 self.values = value
             else:
                 self.values = input(
-                    'Please enter phone number in format +380998887722 (\'+\' symbol and 12 digits)')  # noqa: E501
+                    "Please enter phone number in format +380998887722 ('+' symbol and 12 digits)"
+                )  # noqa: E501
             try:
-                for number in self.values.split(' '):
-                    if re.match(r'^\+\d{12}$', number) or number == '':
+                for number in self.values.split(" "):
+                    if re.match(r"^\+\d{12}$", number) or number == "":
                         self.value.append(number)
                     else:
                         raise ValueError
             except ValueError:
                 print(
-                    'Incorrect phone number format! Please provide correct phone number format.')  # noqa: E501
+                    "Incorrect phone number format! Please provide correct phone number format."
+                )  # noqa: E501
             else:
                 break
 
@@ -83,45 +83,47 @@ class ContactBirthdayError(Exception):
 
 
 class ContactBirthday(ContactField):
-
-    def __init__(self, value=''):
+    def __init__(self, value=""):
         while True:
             if value:
                 self.value = value
             else:
                 self.value = input("Birthday date(dd/mm/YYYY): ")
             try:
-                if re.match(r'^\d{2}/\d{2}/\d{4}$', self.value):
-                    self.value = datetime.strptime(
-                        self.value.strip(), "%d/%m/%Y")
+                if re.match(r"^\d{2}/\d{2}/\d{4}$", self.value):
+                    self.value = datetime.strptime(self.value.strip(), "%d/%m/%Y")
                     self.value = self.value.date()
                     break
-                elif self.value == '':
+                elif self.value == "":
                     break
                 else:
                     raise ValueError
             except ValueError:
-                print('Incorrect date! Please provide correct date format.')
+                print("Incorrect date! Please provide correct date format.")
 
     def __getitem__(self):
         return self.value.date()
 
 
 class ContactEmail(ContactField):
-    def __init__(self, value=''):
+    def __init__(self, value=""):
         while True:
             if value:
                 self.value = value
             else:
                 self.value = input("Email: ")
             try:
-                if re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$",
-                            self.value) or self.value == '':
+                if (
+                    re.match(
+                        r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", self.value
+                    )
+                    or self.value == ""
+                ):
                     break
                 else:
                     raise ValueError
             except ValueError:
-                print('Incorrect email! Please provide correct email.')
+                print("Incorrect email! Please provide correct email.")
 
     @property
     def value(self):
@@ -160,13 +162,15 @@ class ContactNote(ContactField):
 
 
 class ContactRecord:
-
-    def __init__(self, name: ContactName,
-                 phone: ContactPhone = None,
-                 birthday: ContactBirthday = None,
-                 email: ContactEmail = None,
-                 address: ContactAddress = None,
-                 note: ContactNote = None) -> None:
+    def __init__(
+        self,
+        name: ContactName,
+        phone: ContactPhone = None,
+        birthday: ContactBirthday = None,
+        email: ContactEmail = None,
+        address: ContactAddress = None,
+        note: ContactNote = None,
+    ) -> None:
         self.name = name
         self.phones = []
         self.birthday = birthday
@@ -223,10 +227,10 @@ class ContactRecord:
         return result
 
     def __str__(self) -> str:
-
         console = Console()
-        table = Table(show_header=True, header_style="bold magenta",
-                      width=120, show_lines=True)
+        table = Table(
+            show_header=True, header_style="bold magenta", width=120, show_lines=True
+        )
         table.add_column("Name", width=40, no_wrap=False)
         table.add_column("Phones", width=40, no_wrap=False)
         table.add_column("Birthday", width=40, no_wrap=False)
@@ -248,16 +252,15 @@ class ContactRecord:
 
     def remove_phone(self, phone):
         for idx, p in enumerate(self.phones):
-            print(f'p= {self.phones[idx]}')
+            print(f"p= {self.phones[idx]}")
             if phone == p:
-                old_phone = (self.phones[idx])
+                old_phone = self.phones[idx]
                 self.phones.remove(self.phones[idx])
                 return f"The phone {old_phone} is deleted"
         return f"{phone} not present in phones of contact {self.name}"
 
 
 class AddressBook(UserDict):
-
     def add_record(self, record: ContactRecord):
         self.data[str(record.name)] = record
         print(f"\nContact  '{record.name}' successfully added")
@@ -281,45 +284,47 @@ class AddressBook(UserDict):
             yield "\n".join(result)
 
     def serialize_to_csv(self):
-        filename = 'address_book.csv'
+        filename = "address_book.csv"
         with open(filename, "w", newline="") as file:
             writer = csv.writer(file)
             for rec in self.data.values():
                 name = rec.name
                 phones = [phone for phone in rec.phones]
-                birthday = rec.birthday.strftime(
-                    "%d/%m/%Y") if rec.birthday else ""
+                birthday = rec.birthday.strftime("%d/%m/%Y") if rec.birthday else ""
                 emails = [email for email in rec.emails]
                 address = rec.address
                 note = rec.note
                 writer.writerow(
-                    [name, ",".join(phones), birthday, ",".join(emails), address, note])
-        return 'Saved data to .csv'
+                    [name, ",".join(phones), birthday, ",".join(emails), address, note]
+                )
+        return "Saved data to .csv"
 
     def serialize_to_json(self):
-        filename = 'address_book.json'
+        filename = "address_book.json"
         data_list = []
         for record in self.data.values():
             data = {
                 "name": record.name,
                 "phones": [phone for phone in record.phones],
-                "birthday": record.birthday.strftime("%d/%m/%Y") if record.birthday else "",  # noqa: E501
+                "birthday": record.birthday.strftime("%d/%m/%Y")
+                if record.birthday
+                else "",  # noqa: E501
                 "emails": [email for email in record.emails],
                 "address": record.address,
-                "note": record.note
+                "note": record.note,
             }
             data_list.append(data)
         with open(filename, "w") as file:
             json.dump(data_list, file)
-        return 'Saved data to .json'
+        return "Saved data to .json"
 
     def save(self):
-        with open('address_book.bin', 'wb') as file:
+        with open("address_book.bin", "wb") as file:
             pickle.dump(self.data, file)
-        return 'OK'
+        return "OK"
 
     def load(self, file_name):
-        with open(file_name, 'rb') as file:
+        with open(file_name, "rb") as file:
             self.data = pickle.load(file)
         return self.data
 
@@ -334,28 +339,47 @@ class AddressBook(UserDict):
 
     def congratulate(self):
         result = []
-        WEEKDAYS = ['Monday', 'Tuesday', 'Wednesday',
-                    'Thursday', 'Friday', 'Saturday', 'Sunday']
+        WEEKDAYS = [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+            "Sunday",
+        ]
         current_year = datetime.now().year
-        congratulate = {'Monday': [], 'Tuesday': [],
-                        'Wednesday': [], 'Thursday': [], 'Friday': []}
+        congratulate = {
+            "Monday": [],
+            "Tuesday": [],
+            "Wednesday": [],
+            "Thursday": [],
+            "Friday": [],
+        }
 
         for account in self.keys():
             if self[account].birthday:
-                new_birthday = self[account].birthday.replace(
-                    year=current_year)
+                new_birthday = self[account].birthday.replace(year=current_year)
                 birthday_weekday = new_birthday.weekday()
                 next_week = (datetime.now() + timedelta(days=7)).date()
                 if date.today() < new_birthday < next_week:
                     if birthday_weekday < 5:
                         congratulate[WEEKDAYS[birthday_weekday]].append(
-                            self[account].name)
+                            self[account].name
+                        )
                     else:
                         congratulate["Monday"].append(self[account].name)
         for key, value in congratulate.items():
             if len(value):
                 result.append(f"{key}: {', '.join(value)}")
-        return '! Do not forget to congratulate !\n' + '_' * 59 + '\n' + '\n'.join(result) + '\n' + '_' * 59  # noqa: E501
+        return (
+            "! Do not forget to congratulate !\n"
+            + "_" * 59
+            + "\n"
+            + "\n".join(result)
+            + "\n"
+            + "_" * 59
+        )  # noqa: E501
 
     def _format_record(self, record):
         name = record.name
@@ -370,8 +394,7 @@ class AddressBook(UserDict):
         console = Console()
         table = self._create_table()
         for record in self.data.values():
-            name, phones, bday, emails, address, note = self._format_record(
-                record)
+            name, phones, bday, emails, address, note = self._format_record(record)
             table.add_row(name, phones, bday, emails, address, note)
         console.print(table)
         return "Success!\n"
@@ -380,15 +403,15 @@ class AddressBook(UserDict):
         console = Console()
         table = self._create_table()
         for record in self.data.values():
-            name, phones, bday, emails, address, note = self._format_record(
-                record)
+            name, phones, bday, emails, address, note = self._format_record(record)
             table.add_row(name, phones, bday, emails, address, note)
         console.print(table)
         return "Success!\n"
 
     def _create_table(self):
-        table = Table(show_header=True, header_style="bold magenta",
-                      width=120, show_lines=True)
+        table = Table(
+            show_header=True, header_style="bold magenta", width=120, show_lines=True
+        )
         table.add_column("Name", width=40, no_wrap=False)
         table.add_column("Phones", width=40, no_wrap=False)
         table.add_column("Birthday", width=40, no_wrap=False)
@@ -398,7 +421,7 @@ class AddressBook(UserDict):
         return table
 
     def search(self, s: str):
-        """Used to search for a specific contact in the address book 
+        """Used to search for a specific contact in the address book
         based on a given search term
 
         Parameters
@@ -410,18 +433,25 @@ class AddressBook(UserDict):
         result_dict = AddressBook()
         for key in self.keys():
             rec = self[key]
-            phone = '.'.join(phone for phone in rec.phones)
+            phone = ".".join(phone for phone in rec.phones)
 
             if rec.birthday == "":
                 show_birthday = ""
             else:
-                show_birthday = datetime.strftime(rec.birthday, '%d/%m/%Y')
+                show_birthday = datetime.strftime(rec.birthday, "%d/%m/%Y")
 
             emails = ".".join(email for email in rec.emails)
             address = rec.address
             note = rec.note
 
-            if s in str(rec.name) or s in phone or s in show_birthday or s in emails or s in address or s in note:  # noqa: E501
+            if (
+                s in str(rec.name)
+                or s in phone
+                or s in show_birthday
+                or s in emails
+                or s in address
+                or s in note
+            ):  # noqa: E501
                 output.append(rec)
             for item in output:
                 result_dict[item.name] = item

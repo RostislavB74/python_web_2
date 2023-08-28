@@ -1,15 +1,29 @@
 import shutil
 from pathlib import Path
-#from normalize import normalize
+
+# from normalize import normalize
 from personal_assistant.normalize import normalize
 
-CATEGORIES = {"Audio": [".mp3", ".aiff", ".wav", ".ogg"],
-              "Video": [".mkv", ".mov", ".mp4", ".avi"],
-              "Document": [".docx", ".pptx", ".doc", ".txt", ".pdf", ".xlsx", ".pptx", ".rtf", ".xls", ".pub"],
-              "Image": [".jpeg", ".png", ".svg", ".jpg", ".bmp", ".gif"],
-              "Archive": [".zip", ".tar", ".7z", ".gz", ".rar"],
-              "Python": [".py", ".json", ".pyc"],
-              "Other": []}
+CATEGORIES = {
+    "Audio": [".mp3", ".aiff", ".wav", ".ogg"],
+    "Video": [".mkv", ".mov", ".mp4", ".avi"],
+    "Document": [
+        ".docx",
+        ".pptx",
+        ".doc",
+        ".txt",
+        ".pdf",
+        ".xlsx",
+        ".pptx",
+        ".rtf",
+        ".xls",
+        ".pub",
+    ],
+    "Image": [".jpeg", ".png", ".svg", ".jpg", ".bmp", ".gif"],
+    "Archive": [".zip", ".tar", ".7z", ".gz", ".rar"],
+    "Python": [".py", ".json", ".pyc"],
+    "Other": [],
+}
 dictionary_of_files = {}
 dictionary_global = {}
 dictionary_of_ext = {}
@@ -29,7 +43,7 @@ def unpack_archive(path: Path):
     ext = [".zip", ".tar", ".7z", ".gz", ".rar"]
 
     for el in path.glob(f"**/*"):
-        if not el.name.startswith('.'):
+        if not el.name.startswith("."):
             if el.suffix in ext:
                 filename = el.stem
                 arch_dir = path.joinpath(path / archive_folder / filename)
@@ -45,7 +59,7 @@ def unpack_archive(path: Path):
 def delete_empty_folder(path: Path):
     folders_to_delete = [f for f in path.glob("**")]
     for folder in folders_to_delete[::-1]:
-        if not folder.name.startswith('.'):
+        if not folder.name.startswith("."):
             try:
                 folder.rmdir()
             except OSError:
@@ -62,7 +76,7 @@ def get_categories(path: Path) -> str:
 
 def sort_folder(path: Path):
     for item in path.glob("**/*"):
-        if not item.name.startswith('.'):
+        if not item.name.startswith("."):
             if item.is_file():
                 cat = get_categories(item)
                 move_file(item, path, cat)
@@ -70,7 +84,7 @@ def sort_folder(path: Path):
 
 def files_sorter(path: Path):
     for item in path.glob("**/*"):
-        if not item.name.startswith('.'):
+        if not item.name.startswith("."):
             if item.is_file():
                 # print(item)
                 cat = get_categories(item)
@@ -80,13 +94,13 @@ def files_sorter(path: Path):
                 else:
                     dictionary_of_files[cat] = [item.name]
     dictionary_global.update(dictionary_of_files)
-    print(' ________________________________________________________')
+    print(" ________________________________________________________")
     print("| {:^54} |".format("▣ Files found in folders: ▣"))
-    print('|________________________________________________________|')
+    print("|________________________________________________________|")
     for el, values in dictionary_global.items():
-        print('|________________________________________________________|')
+        print("|________________________________________________________|")
         print("|▶ {:<30} | {:>20} |".format(el, len(values)))
-        print('|________________________________________________________|')
+        print("|________________________________________________________|")
     return dictionary_global == {}
 
 
@@ -97,9 +111,7 @@ def sorter_starter():
     print("|" + "_" * 32 + "|")
 
     while True:
-
         try:
-
             path = Path(input("|>>> "))
             if path.name.lower() in ("close", "exit", "good bye", "0"):
                 return "\nGood bye!"
@@ -128,7 +140,7 @@ def sorter_starter():
         print("\n If you like to continue type 'resume' or type 'exit' to exit\n")
         user_answer = input("|>>> ")
         if user_answer.lower() in ("close", "exit", "goodbye", "0"):
-            return '\nGood bye!'
+            return "\nGood bye!"
         else:
             print("_" * 34)
             print("| Input path to folder:")

@@ -1,12 +1,23 @@
 import functools
-#from address_book_classes import ContactRecord, ContactName, ContactPhone, ContactBirthday, ContactEmail, ContactAddress, ContactNote, AddressBook  # noqa: E501
+
+# from address_book_classes import ContactRecord, ContactName, ContactPhone, ContactBirthday, ContactEmail, ContactAddress, ContactNote, AddressBook  # noqa: E501
 from datetime import date, timedelta, datetime
 from personal_assistant.helpers import instruction, parser_input, command_handler
-#from personal_assistant.address_book_classes import Record, Name, Phone, Birthday, Email, Address, Note, AddressBook
-from personal_assistant.address_book_classes import ContactRecord, ContactName, ContactPhone, ContactBirthday, ContactEmail, ContactAddress, ContactNote, AddressBook  # noqa: E501
+
+# from personal_assistant.address_book_classes import Record, Name, Phone, Birthday, Email, Address, Note, AddressBook
+from personal_assistant.address_book_classes import (
+    ContactRecord,
+    ContactName,
+    ContactPhone,
+    ContactBirthday,
+    ContactEmail,
+    ContactAddress,
+    ContactNote,
+    AddressBook,
+)  # noqa: E501
 
 address_book = AddressBook()
-filename = 'address_book'
+filename = "address_book"
 
 
 def input_errors(func):
@@ -36,19 +47,26 @@ def add(*args):
         email = ContactEmail().value.strip()
         address = ContactAddress(input("Address: ")).value
         note = ContactNote(input("Note: ")).value
-        record = ContactRecord(name=name, phone=phones, birthday=birthday,
-                               email=email, address=address, note=note)
+        record = ContactRecord(
+            name=name,
+            phone=phones,
+            birthday=birthday,
+            email=email,
+            address=address,
+            note=note,
+        )
     return address_book.add_record(record)
 
 
 @input_errors
 def edit_contacts(*args):
-    name = input('Contact name: ')
+    name = input("Contact name: ")
     if name not in address_book.keys():
         return "\nThis name not exist! Use 'show all' to show contacts...\n"
     else:
         parameter = input(
-            'Which parameter to edit(phones, birthday, email, address, note): ').strip()
+            "Which parameter to edit(phones, birthday, email, address, note): "
+        ).strip()
         try:
             if parameter not in ("phones", "birthday", "email", "address", "note"):
                 raise ValueError
@@ -58,20 +76,20 @@ def edit_contacts(*args):
 
             try:
                 if res:
-                    if parameter == 'birthday':
+                    if parameter == "birthday":
                         new_value = ContactBirthday(new_value).value
-                    elif parameter == 'email':
-                        parameter = 'emails'
-                        new_contact = new_value.split(' ')
+                    elif parameter == "email":
+                        parameter = "emails"
+                        new_contact = new_value.split(" ")
                         new_value = []
                         for emails in new_contact:
                             new_value.append(ContactEmail(emails).value)
-                    elif parameter == 'address':
+                    elif parameter == "address":
                         new_value = ContactAddress(new_value).value
-                    elif parameter == 'note':
+                    elif parameter == "note":
                         new_value = ContactNote(new_value).value
-                    elif parameter == 'phones':
-                        new_contact = new_value.split(' ')
+                    elif parameter == "phones":
+                        new_contact = new_value.split(" ")
                         new_value = []
                         for number in new_contact:
                             new_value.extend(ContactPhone(number).value)
@@ -80,9 +98,9 @@ def edit_contacts(*args):
                 res: ContactRecord = address_book.get(str(name))
                 return res
             except ValueError:
-                print('Incorrect parameter! Please provide correct parameter')
+                print("Incorrect parameter! Please provide correct parameter")
             except NameError:
-                print('There is no such contact in address book!')
+                print("There is no such contact in address book!")
         except ValueError:
             return "Wrong parameter!"
 
@@ -124,20 +142,20 @@ def get_days_to_birthday(*args):
         res: ContactRecord = address_book.get(str(name))
         result = int(res.days_to_birthday(res.birthday)) + 1
         if result == 0:
-            return f'{name} tomorrow birthday'
+            return f"{name} tomorrow birthday"
         if result == 365:
-            return f'{name} today is birthday'
-        return f'{name} until the next birthday left {result} days'
+            return f"{name} today is birthday"
+        return f"{name} until the next birthday left {result} days"
     else:
         return f'Contact with name "{name}" does not exist'
 
 
 def who_has_bd_n_days():
-    days = input(str('How many days?\n>>> '))
+    days = input(str("How many days?\n>>> "))
     try:
         n_days = int(days) + 1
     except (TypeError, ValueError):
-        return 'This is not a number. Give me a number of days.'
+        return "This is not a number. Give me a number of days."
     result = []
     result_dict = AddressBook()
     current_year = datetime.now().year
@@ -166,19 +184,19 @@ def help():
 
 
 ADDRESSBOOK_COMMANDS = {
-    'add': [add, 'to add contact'],
-    'show all': [show_all_address_book, 'to show all contacts'],
-    'save': [address_book.save, 'to save address book'],
-    'csv save': [address_book.serialize_to_csv, 'to save address book .csv'],
-    'json save': [address_book.serialize_to_json, 'to save address book .json'],
-    'bday': [get_days_to_birthday, 'to get day to birthday'],
-    'b-in': [who_has_bd_n_days, 'to show birthday during next N days'],
-    'remove': [remove_phone, 'to remove phone from contact'],
-    'edit': [edit_contacts, 'to edit existing contact'],
-    'delete': [delete_record, 'to delete existing contact'],
-    'search': [search, 'search contact by any match'],
-    'help': [help, 'to see list of commands'],
-    "0 or exit": [exit_book, 'to exit']
+    "add": [add, "to add contact"],
+    "show all": [show_all_address_book, "to show all contacts"],
+    "save": [address_book.save, "to save address book"],
+    "csv save": [address_book.serialize_to_csv, "to save address book .csv"],
+    "json save": [address_book.serialize_to_json, "to save address book .json"],
+    "bday": [get_days_to_birthday, "to get day to birthday"],
+    "b-in": [who_has_bd_n_days, "to show birthday during next N days"],
+    "remove": [remove_phone, "to remove phone from contact"],
+    "edit": [edit_contacts, "to edit existing contact"],
+    "delete": [delete_record, "to delete existing contact"],
+    "search": [search, "search contact by any match"],
+    "help": [help, "to see list of commands"],
+    "0 or exit": [exit_book, "to exit"],
 }
 
 
@@ -196,12 +214,12 @@ def addressbook_starter():
     instruction(ADDRESSBOOK_COMMANDS)
 
     while True:
-        user_input = input('Input a command\n>>>').lower()
+        user_input = input("Input a command\n>>>").lower()
         command = parser_input(user_input.lower(), ADDRESSBOOK_COMMANDS)
-        if user_input == 'help':
+        if user_input == "help":
             instruction(ADDRESSBOOK_COMMANDS)
         elif user_input in ("exit", "0"):
-            print('Contact book closed')
+            print("Contact book closed")
             address_book.save()
             break
         else:
