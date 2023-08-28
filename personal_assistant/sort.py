@@ -1,6 +1,7 @@
 import shutil
 from pathlib import Path
-from normalize import normalize
+#from normalize import normalize
+from personal_assistant.normalize import normalize
 
 CATEGORIES = {"Audio": [".mp3", ".aiff", ".wav", ".ogg"],
               "Video": [".mkv", ".mov", ".mp4", ".avi"],

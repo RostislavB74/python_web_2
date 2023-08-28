@@ -1,8 +1,9 @@
 import functools
-from address_book_classes import ContactRecord, ContactName, ContactPhone, ContactBirthday, ContactEmail, ContactAddress, ContactNote, AddressBook  # noqa: E501
+#from address_book_classes import ContactRecord, ContactName, ContactPhone, ContactBirthday, ContactEmail, ContactAddress, ContactNote, AddressBook  # noqa: E501
 from datetime import date, timedelta, datetime
 from helpers import instruction, parser_input, command_handler
-
+#from personal_assistant.address_book_classes import Record, Name, Phone, Birthday, Email, Address, Note, AddressBook
+from personal_assistant.address_book_classes import ContactRecord, ContactName, ContactPhone, ContactBirthday, ContactEmail, ContactAddress, ContactNote, AddressBook  # noqa: E501
 
 address_book = AddressBook()
 filename = 'address_book'
