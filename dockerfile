@@ -11,7 +11,7 @@ WORKDIR /Usr/python_web_2
 COPY . .
 
 # Встановимо залежності всередині контейнера
-RUN pipenv install -r requirements.txt
+RUN pip install -r requirements.txt
 
 # Позначимо порт, де працює застосунок всередині контейнера
 EXPOSE 5000
