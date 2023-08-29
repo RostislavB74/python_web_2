@@ -3,10 +3,9 @@
 FROM python:3.10
 
 # Встановимо змінну середовища
-ENV APP_HOME /app
-
+#ENV APP_HOME /personal_assistant
 # Встановимо робочу директорію всередині контейнера
-WORKDIR $APP_HOME
+WORKDIR /Users/admin/Python/python_web_2
 
 # Скопіюємо інші файли в робочу директорію контейнера
 COPY . .
@@ -18,4 +17,4 @@ RUN pip install -r requirements.txt
 EXPOSE 5000
 
 # Запустимо наш застосунок всередині контейнера
-ENTRYPOINT ["python", "app.py"]
+ENTRYPOINT ["python", "main_menu.py"]
