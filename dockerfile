@@ -17,4 +17,4 @@ RUN pip install -r requirements.txt
 EXPOSE 5000
 
 # Запустимо наш застосунок всередині контейнера
-ENTRYPOINT ["pipenv shell", "personal_assistant"]
+ENTRYPOINT ["python", "personal_assistant"]
