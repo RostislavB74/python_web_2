@@ -5,7 +5,7 @@ FROM python:3.10
 # Встановимо змінну середовища
 #ENV APP_HOME /personal_assistant
 # Встановимо робочу директорію всередині контейнера
-WORKDIR /Users/admin/Python/python_web_2
+WORKDIR /Usr/python_web_2
 
 # Скопіюємо інші файли в робочу директорію контейнера
 COPY . .
