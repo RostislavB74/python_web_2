@@ -6,15 +6,16 @@ FROM python:3.10
 #ENV APP_HOME /personal_assistant
 # Встановимо робочу директорію всередині контейнера
 WORKDIR /Usr/python_web_2
-
+ADD Pipfile.lock Pipfile /Usr/python_web_2/
 # Скопіюємо інші файли в робочу директорію контейнера
 COPY . .
 
 # Встановимо залежності всередині контейнера
 RUN pip install -r requirements.txt
-
+RUN pipvenv shell
+RUN python setup1.py develop
 # Позначимо порт, де працює застосунок всередині контейнера
 EXPOSE 5000
 
 # Запустимо наш застосунок всередині контейнера
-ENTRYPOINT ["python", "personal_assistant"]
+ENTRYPOINT ["personal_assistant"]

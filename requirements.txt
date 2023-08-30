@@ -20,3 +20,5 @@ stack-data==0.6.2
 traitlets==5.9.0; python_version >= '3.7'
 typing-extensions==4.7.1; python_version < '3.9'
 wcwidth==0.2.6
+pipenv==2023.8.28
+virtualenv==20.24.3
