@@ -28,7 +28,7 @@ WORKDIR /usr/src/app/personal_assistant
 COPY Pipfile ./
 COPY Pipfile.lock ./
 
-RUN set -ex && pipenv install --deploy --system
-RUN pipenv run python setup1.py develop
 
+RUN pipenv run python setup1.py develop
+RUN personal_assistant
 COPY . .
