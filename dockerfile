@@ -46,11 +46,10 @@ WORKDIR /app
 COPY Pipfile Pipfile.lock /app/
 
 # Install dependencies using Pipenv
-#RUN pipenv install --deploy --ignore-pipfile
+RUN pipenv install --deploy --ignore-pipfile
 
 # Copy the rest of the application code
 COPY . /app
 
 # Set the default command to run your script
-ENTRYPOINT  ["pipenv", "shell","python", "setup1.py", "develop"]
-#RUN personal_assistant
+CMD  ["pipenv", "run", "python", "setup1.py", "develop"]
