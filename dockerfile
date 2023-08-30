@@ -23,12 +23,14 @@ FROM python:3.10
 
 RUN pip3 install pipenv
 
-WORKDIR /usr/src/app/personal_assistant
+WORKDIR /usr/src/app/
 
 COPY Pipfile ./
 COPY Pipfile.lock ./
 
 
+# RUN pipenv run python setup1.py develop
+# RUN personal_assistant
+COPY . .
 RUN pipenv run python setup1.py develop
 RUN personal_assistant
-COPY . .
