@@ -20,4 +20,4 @@ RUN pipenv run python3 setup1.py develop
 
 # Start an interactive shell when the container runs
 #CMD ["pipenv", "shell"]
-CMD ["pipenv", "run", "personal_assistant"]
+#CMD ["pipenv", "run", "personal_assistant"]
