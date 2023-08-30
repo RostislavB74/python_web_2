@@ -29,7 +29,7 @@ COPY Pipfile ./
 COPY Pipfile.lock ./
 
 
-RUN pipenv run python setup1.py develop
+RUN pipenv python3 setup1.py develop
 # RUN personal_assistant
 COPY . .
 CMD ['pipenv run python setup1.py develop', 'personal_assistant']
