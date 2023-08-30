@@ -52,4 +52,4 @@ RUN pipenv install --deploy --ignore-pipfile
 COPY . /app
 
 # Set the default command to run your script
-CMD ["pipenv", "run", "python3", "setup1.py"]
+CMD ["pipenv", "run", "python3", "setup1.py", "develop"]
