@@ -12,7 +12,7 @@ COPY . .
 
 # Встановимо залежності всередині контейнера
 RUN pip install -r requirements.txt
-RUN pipvenv shell
+RUN pipenv shell
 RUN python setup1.py develop
 # Позначимо порт, де працює застосунок всередині контейнера
 EXPOSE 5000
