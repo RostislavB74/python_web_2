@@ -23,7 +23,7 @@ FROM python:3.10
 
 RUN pip3 install pipenv
 
-WORKDIR C:/Users/admin/Python/python_web_2/
+WORKDIR /Users/admin/Python/python_web_2/
 ADD Pipfile.lock Pipfile /Usr/python_web_2/
 COPY Pipfile ./
 COPY Pipfile.lock ./
