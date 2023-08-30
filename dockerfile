@@ -32,6 +32,6 @@ COPY Pipfile.lock ./
 # RUN pipenv run python setup1.py develop
 # RUN personal_assistant
 COPY . .
-RUN pipenv shell
+RUN bash -c 'pipenv shell'
 RUN python setup1.py develop
 RUN personal_assistant
