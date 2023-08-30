@@ -18,5 +18,6 @@ COPY . /app
 # Install your package using setup1.py
 RUN pipenv run python3 setup1.py develop
 
-# Run your personal_assistant executable
-CMD ["pipenv shell"]
+# Start an interactive shell when the container runs
+#CMD ["pipenv", "shell"]
+#CMD ["pipenv", "run", "personal_assistant"]
