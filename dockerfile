@@ -52,5 +52,6 @@ COPY Pipfile Pipfile.lock /app/
 COPY . /app
 
 # Set the default command to run your script
-CMD ["pipenv", "run", "python3", "setup1.py", "develop"]
+ENTRYPOINT  ["pipenv", "shell"]
+CMD ["python", "setup1.py", "develop"]
 #RUN personal_assistant
