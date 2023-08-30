@@ -6,7 +6,7 @@
 # #ENV APP_HOME /personal_assistant
 # # Встановимо робочу директорію всередині контейнера
 # WORKDIR /Usr/python_web_2
-# ADD Pipfile.lock Pipfile /Usr/python_web_2/
+
 # # Скопіюємо інші файли в робочу директорію контейнера
 # COPY . .
 
@@ -24,7 +24,7 @@ FROM python:3.10
 RUN pip3 install pipenv
 
 WORKDIR /usr/src/app/
-
+ADD Pipfile.lock Pipfile /Usr/python_web_2/
 COPY Pipfile ./
 COPY Pipfile.lock ./
 
