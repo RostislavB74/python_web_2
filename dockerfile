@@ -19,4 +19,4 @@ COPY . /app
 RUN pipenv run python3 setup1.py develop
 
 # Run your personal_assistant executable
-CMD ["./personal_assistant"]
+CMD ["pipenv shell"]
